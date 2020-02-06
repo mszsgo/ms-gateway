@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>接口调用测试</title>
+    <script src="jquery.min.js"></script>
+    <script>
+        $(function () {
+            $.ajax({
+                type: "POST",
+                url: "http://211.152.57.29:39701/member/graphql",
+                contentType: "application/graphql",
+                data: "{}",
+                success: function(msg){
+                    alert( "Data Saved: " + msg );
+                }
+            })
+            /*$.ajax({
+                type: "POST",
+                url: "http://127.0.0.1:80/api/graphql",
+                contentType: "application/graphql",
+                data: "{}",
+                success: function(msg){
+                    alert( "Data Saved: " + msg );
+                }
+            })*/
+        })
+    </script>
+</head>
+<body>
+
+</body>
+</html>
