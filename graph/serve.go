@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/http/httputil"
 	"runtime"
 	"strings"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/mszsgo/hgraph"
 	"github.com/rs/cors"
@@ -72,6 +73,10 @@ func Handles() {
 	http.Handle("/", cors.Default().Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		uri := r.URL.Path[1:]
 		index := strings.Index(uri, "/")
+		if index <= 0 {
+			w.Write([]byte("path=''"))
+			return
+		}
 		host := uri[0:index]
 		path := uri[index:]
 		log.Printf("host=%s  path=%s", host, path)
@@ -95,7 +100,10 @@ func Handles() {
 			io.WriteString(w, "The request `Body` cannot be null")
 			return
 		}
-		w.Write(hgraph.Gateway(bytes))
+		log.WithField("requestBody", bytes).Info("请求报文")
+		rs := hgraph.Gateway(bytes)
+		log.WithField("responseBody", bytes).Info("响应报文")
+		w.Write(rs)
 	})))
 
 }
